@@ -1,7 +1,7 @@
 websockets
 requests
 bs4
-audioop-lts
+discord
 aiohttp
 msgpack
 flask
