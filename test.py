@@ -3,7 +3,7 @@ import os
 
 project_dir = os.path.dirname(os.path.abspath(__file__))  # Lấy đường dẫn tuyệt đối tới thư mục chứa file Python
 run_command = [
-    "docker", "run", "-p", "7860:7860", "Dockerfile"
+    "python", "main.py"
 ]
 
 # Thực thi lệnh chạy Docker container
