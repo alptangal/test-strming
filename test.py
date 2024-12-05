@@ -1,5 +1,8 @@
 import subprocess
 import os
+import server
+
+server.b()
 
 project_dir = os.path.dirname(os.path.abspath(__file__))  # Lấy đường dẫn tuyệt đối tới thư mục chứa file Python
 run_command = [
