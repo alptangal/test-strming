@@ -106,20 +106,12 @@ async def my_process(lark):
             break
 
 async def main():
-    try:
-        req=requests.get('http://localhost:8888')
-        if int(str(datetime.datetime.now().timestamp()).split('.')[0])-int(req.text.split('.')[0])>=10:
-            raise Exception("Server not response")
-        sys.exit("Exited")
-    except Exception as error:
-        print(error)
-        server.b() 
-        lark=basic.LarkClass(APP_ID,APP_SECRET)
-        while True:
-            try:
-                await my_process(lark)
-            except:
-                print('Error here ')
-                traceback.print_exc()
-                pass
+    lark=basic.LarkClass(APP_ID,APP_SECRET)
+    while True:
+        try:
+            await my_process(lark)
+        except:
+            print('Error here ')
+            traceback.print_exc()
+            pass
 #asyncio.run(main())
