@@ -17,12 +17,7 @@ async def main():
             "python", "main.py"
         ]
         try:
-            process = await asyncio.create_subprocess_exec(
-                *run_command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                stdin=asyncio.subprocess.PIPE,
-            )
+            process = subprocess.run(run_command)
             while True:
                 try:
                     #stdout_line=await asyncio.wait_for(process.stdout.readline(), timeout=1)
