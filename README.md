@@ -1,7 +1,7 @@
 ---
-title: 8 A 9iaksd S Tr 3ann Xad2
-emoji: 🏃
-colorFrom: green
+title: Ga0 Pl N G Str Lit Xa0
+emoji: 💻
+colorFrom: yellow
 colorTo: yellow
 sdk: docker
 pinned: false

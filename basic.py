@@ -1,13 +1,10 @@
 import aiohttp
-from aiohttp import ClientTimeout
 import asyncio
 import subprocess
 import requests
 from datetime import datetime
-import traceback
 
 class LarkClass:
-    # Hàm khởi tạo (Constructor)
     def __init__(self,app_id,app_secret):
         self.tenant_token=None
         self.user_token=None
@@ -19,8 +16,6 @@ class LarkClass:
         self.headers={
             'authorization':f"Bearer {self.tenant_token or self.user_token or self.app_token}",
         }
-
-    # Phương thức
     async def get_tenant_token(self):
         try:
             now=int(datetime.now().timestamp())
@@ -31,21 +26,18 @@ class LarkClass:
                     'app_id':self.app_id,
                     'app_secret':self.app_secret
                 }
-                async with aiohttp.ClientSession(timeout=ClientTimeout(total=30)) as session:
+                async with aiohttp.ClientSession() as session:
                     async with session.post(url, headers=headers, json=data) as res:
                         if res.status<400:
+                            print('Get token success')
                             result=await res.json()
                             self.token_created_at=int(datetime.now().timestamp())
                             self.expire=result['expire']
                             self.tenant_token=result['tenant_access_token']
-                            print('Get token success')
-                            return True
+                            #return result
                 return False
         except Exception as err:
-            await res.release()
-            await session.close()
             print(err)
-            traceback.print_exc()
             return False
     async def get_user_token(self):
         try:
@@ -55,7 +47,7 @@ class LarkClass:
                 'app_id':self.app_id,
                 'app_secret':self.app_secret
             }
-            async with aiohttp.ClientSession(timeout=ClientTimeout(total=30)) as session:
+            async with aiohttp.ClientSession() as session:
                 async with session.post(url, headers=headers, json=data) as res:
                     if res.status<400:
                         print('Get token success')
@@ -63,10 +55,7 @@ class LarkClass:
                         return result
             return False
         except Exception as err:
-            await res.release()
-            await session.close()
             print(err)
-            traceback.print_exc()
             return False
         
     async def get_app_token(self):
@@ -77,7 +66,7 @@ class LarkClass:
                 'app_id':self.app_id,
                 'app_secret':self.app_secret
             }
-            async with aiohttp.ClientSession(timeout=ClientTimeout(total=30)) as session:
+            async with aiohttp.ClientSession() as session:
                 async with session.post(url, headers=headers, json=data) as res:
                     if res.status<400:
                         print('Get token success')
@@ -85,43 +74,39 @@ class LarkClass:
                         return result
             return False
         except Exception as err:
-            await res.release()
-            await session.close()
             print(err)
-            traceback.print_exc()
             return False
-    async def create_new_request(self, method, url, data=None):
+    async def create_new_request(self,method,url,data=None):
         await self.get_tenant_token()
-        headers = {
-            'authorization': f"Bearer {self.tenant_token or self.user_token or self.app_token}",
+        headers={
+            'authorization':f"Bearer {self.tenant_token or self.user_token or self.app_token}",
         }
-        try:
-            async with aiohttp.ClientSession(timeout=ClientTimeout(total=30)) as session:
+        async with aiohttp.ClientSession() as session:
+            try:
                 if method.lower() == "get":
                     response = await session.get(url, headers=headers)
                 elif method.lower() == "post":
-                    response = await session.post(url, headers=headers, json=data)
+                    response = await session.post(url, headers=headers,json=data)
+                    #print(await response.text())
                 elif method.lower() == "put":
-                    response = await session.put(url, headers=headers, json=data)
+                    response = await session.put(url, headers=headers,json=data)
                 elif method.lower() == "delete":
                     if data:
-                        response = await session.delete(url, headers=headers, json=data)
+                        response = await session.delete(url, headers=headers,json=data)
                     else:
                         response = await session.delete(url, headers=headers)
                 else:
                     raise ValueError(f"Unsupported method: {method}")
-                # Đảm bảo giải phóng kết nối đúng cách
-                if response.status < 400:
-                    result = await response.json()
+                if response.status<400:
+                    result=await response.json()
                     if 'data' in result:
                         return result['data']
                     print(result)
                 if 'x-ogw-ratelimit-reset' in response.headers:
-                    return {'status': 'error', 'msg': f"Rate limit is exceeded, reconnect in {response.headers['x-ogw-ratelimit-reset']}", 'reconnect_after': int(response.headers['x-ogw-ratelimit-reset'])}
-        except Exception as err:
-            print(err)
-            traceback.print_exc()
-            return False
+                    return {'status':'error','msg':f"Rate limit is exceeded, reconnect in {response.headers['x-ogw-ratelimit-reset']}",'reconnect_after':int(response.headers['x-ogw-ratelimit-reset'])}
+            except Exception as err:
+                print(err)
+        return False
     async def list_files(self,folder_token):
         result=await self.create_new_request('get',f"https://open.larksuite.com/open-apis/drive/v1/files?folder_token="+folder_token)
         return result
@@ -249,32 +234,4 @@ class LarkClass:
         result=await self.create_new_request(method='post',url=url,data=data)
         if result:
             return result
-        return False
-    async def download_file(self,url,file_name):
-        headers={
-            'authorization':f"Bearer {self.tenant_token or self.user_token or self.app_token}",
-        }
-        try:
-            response = requests.get(url,headers=headers)
-            if response.status_code == 200:
-                content_type = response.headers.get('Content-Type')
-                if 'image' in content_type:
-                    file_extension = '.' + content_type.split('/')[1]
-                elif 'video' in content_type: 
-                    file_extension = '.' + content_type.split('/')[1]
-                elif 'pdf' in content_type:
-                    file_extension = '.pdf'
-                elif 'text' in content_type:
-                    file_extension = '.txt'
-                else:
-                    file_extension = '.bin'
-                file_name = file_name + file_extension
-                with open(file_name, 'wb') as file:
-                    file.write(response.content)
-                print(f"Tệp đã được tải xuống thành công và lưu thành {file_name}.")
-                return file_name
-            else:
-                print(f"Lỗi tải tệp: {response.status_code}")
-        except Exception as err:
-            print(f'Can\'t download file. Error- {err}')
         return False

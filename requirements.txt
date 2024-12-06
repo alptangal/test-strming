@@ -2,6 +2,7 @@ websockets
 requests
 bs4
 discord
+audioop-lts
 aiohttp
 msgpack
 flask
