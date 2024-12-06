@@ -18,24 +18,6 @@ async def main():
         ]
         try:
             process = subprocess.run(run_command)
-            while True:
-                try:
-                    #stdout_line=await asyncio.wait_for(process.stdout.readline(), timeout=1)
-                    stderr_line = await asyncio.wait_for(process.stderr.readline(),timeout=30)
-                except ValueError as e:
-                    print(f"Error reading stderr: {e}")
-                    stderr_line = b""  # Hoặc xử lý theo cách khác
-                if stderr_line:
-                    try:
-                        print(stderr_line.decode('utf-8').strip())
-                    except Exception as err:
-                        print(err)
-                await asyncio.sleep(.1)  # Chờ một chút trước khi kiểm tra lại
-            
-                # Kiểm tra nếu tiến trình kết thúc bằng cách kiểm tra returncode
-                if stderr_line == b'' and process.returncode is not None:
-                    break
-
             returncode = process.returncode
             if returncode != 0:
                 print(f"FFmpeg process ended with error code {returncode}")
