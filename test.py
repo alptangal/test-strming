@@ -26,7 +26,7 @@ async def main():
             while True:
                 try:
                     #stdout_line=await asyncio.wait_for(process.stdout.readline(), timeout=1)
-                    stderr_line = await asyncio.wait_for(process.stderr.readline())
+                    stderr_line = await asyncio.wait_for(process.stderr.readline(),timeout=30)
                 except ValueError as e:
                     print(f"Error reading stderr: {e}")
                     stderr_line = b""  # Hoặc xử lý theo cách khác
