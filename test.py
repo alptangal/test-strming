@@ -17,7 +17,9 @@ async def main():
         run_command = [
             "python3", "main.py"
         ]
+        print(11111)
         main1.test()
+        print(2222)
         '''run_command = [
             "python", "main.py"
         ]
