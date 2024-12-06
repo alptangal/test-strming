@@ -4,6 +4,7 @@ import server
 import requests
 import datetime
 import asyncio
+import main.py
 
 async def main():
     try:
