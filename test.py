@@ -4,6 +4,7 @@ import server
 import requests
 import datetime
 import asyncio
+import main
 
 async def main():
     try:
@@ -16,7 +17,7 @@ async def main():
         run_command = [
             "python3", "main.py"
         ]
-        subprocess.run(run_command)
+        main.test()
         '''run_command = [
             "python", "main.py"
         ]
