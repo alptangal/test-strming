@@ -14,7 +14,7 @@ async def main():
         sys.exit("Exited")
     except Exception as error:
         server.b()
-        run_command = [
+        '''run_command = [
             "python", "main.py"
         ]
         try:
@@ -27,7 +27,7 @@ async def main():
         except asyncio.TimeoutError:
             print("Timeout reached, killing the ffmpeg process.")
             process.kill()  # Kill process nếu hết thời gian chờ
-            await process.wait()  # Đảm bảo tiến trình kết thúc
+            await process.wait()  # Đảm bảo tiến trình kết thúc'''
         '''project_dir = os.path.dirname(os.path.abspath(__file__))  # Lấy đường dẫn tuyệt đối tới thư mục chứa file Python
         
 
