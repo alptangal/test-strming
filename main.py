@@ -3,6 +3,6 @@ import time
 
 def test():
     while True:
-        req=requests.get('http://localhost:8888')
+        req=requests.get('http://127.0.0.1:8888')
         print(req.status_code)
         time.sleep(3)
