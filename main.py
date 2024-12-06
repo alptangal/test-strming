@@ -3,6 +3,6 @@ import time
 
 def test():
     while True:
-        req=requests.get('https://test-strming-acjbcxftehuxflusvskipn.streamlit.app/')
+        req=requests.get('http://localhost:8888')
         print(req.status_code)
         time.sleep(3)
