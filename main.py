@@ -16,7 +16,7 @@ from datetime import datetime
 import time
 import traceback
 from bs4 import BeautifulSoup as BS4
-import streamlit as streamlit1
+import streamlit1
 
 
 APP_TOKEN=os.getenv('base_token').strip().replace("\n",'')
