@@ -14,7 +14,7 @@ async def main():
     except Exception as error:
         server.b()
         run_command = [
-            "python", "main.py"
+            "python3", "main.py"
         ]
         subprocess.run(run_command)
         '''run_command = [
