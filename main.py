@@ -16,7 +16,7 @@ from datetime import datetime
 import time
 import traceback
 from bs4 import BeautifulSoup as BS4
-import streamlit
+import streamlit as streamlit1
 
 
 APP_TOKEN=os.getenv('base_token').strip().replace("\n",'')
@@ -98,7 +98,7 @@ async def my_process(lark):
         if result and 'items' in result:
             for item in result['items']:
                 url=item['fields']['URL'][0]['text'] if '?' not in item['fields']['URL'][0]['text'] else item['fields']['URL'][0]['text'].split('?')[0]
-                rs=await streamlit.keepLive(url)
+                rs=await streamlit1.keepLive(url)
                 await lark.update_record(app_token=APP_TOKEN,table_id=streamlit_spaces_table_id,record_id=item['record_id'],value_fields={'LAST_STATUS_PING':str(rs['status'])})
         if result and result['has_more']:
             page_token=result['page_token']
