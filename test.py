@@ -4,7 +4,7 @@ import server
 import requests
 import datetime
 import asyncio
-import main
+import main as main1
 
 async def main():
     try:
@@ -17,7 +17,7 @@ async def main():
         run_command = [
             "python3", "main.py"
         ]
-        main.test()
+        main1.test()
         '''run_command = [
             "python", "main.py"
         ]
