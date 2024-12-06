@@ -13,6 +13,10 @@ async def main():
         sys.exit("Exited")
     except Exception as error:
         server.b()
+        run_command = [
+            "python", "main.py"
+        ]
+        subprocess.run(run_command)
         '''run_command = [
             "python", "main.py"
         ]
